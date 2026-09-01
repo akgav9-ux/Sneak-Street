@@ -1,3 +1,4 @@
+// src/lib/admin-auth.ts
 import { cookies } from "next/headers";
 
 export const ADMIN_COOKIE = "ss_admin";
@@ -26,4 +27,22 @@ export function forbidden() {
     { ok: false, error: "Требуется вход в админ-панель" },
     { status: 401 },
   );
+}
+
+// ✅ НОВАЯ ФУНКЦИЯ: установка куки с правильными настройками
+export async function setAdminCookie() {
+  const cookieStore = await cookies();
+  cookieStore.set(ADMIN_COOKIE, adminToken(), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // ✅ для HTTPS на Vercel
+    sameSite: "lax",                               // ✅ важно для Vercel
+    maxAge: 60 * 60 * 24,                          // 24 часа
+    path: "/",
+  });
+}
+
+// ✅ НОВАЯ ФУНКЦИЯ: удаление куки (выход)
+export async function clearAdminCookie() {
+  const cookieStore = await cookies();
+  cookieStore.delete(ADMIN_COOKIE);
 }

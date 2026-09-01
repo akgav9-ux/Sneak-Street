@@ -1,51 +1,36 @@
-// app/api/admin/login/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+// src/app/api/admin/login/route.ts
+import { adminPassword, setAdminCookie } from "@/lib/admin-auth";
+import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 
-    if (password === adminPassword) {
-      // ✅ Устанавливаем куку
-      const cookieStore = await cookies();
-      cookieStore.set("admin_auth", "true", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24, // 24 часа
-        path: "/",
-      });
-
-      return NextResponse.json({ success: true });
+    if (password === adminPassword()) {
+      await setAdminCookie(); // ✅ Используем новую функцию
+      return Response.json({ ok: true });
     }
 
-    return NextResponse.json(
-      { error: "Неверный пароль" },
+    return Response.json(
+      { ok: false, error: "Неверный пароль" },
       { status: 401 }
     );
   } catch {
-    return NextResponse.json(
-      { error: "Ошибка сервера" },
+    return Response.json(
+      { ok: false, error: "Ошибка сервера" },
       { status: 500 }
     );
   }
 }
 
-// Проверка авторизации
 export async function GET() {
-  const cookieStore = await cookies();
-  const auth = cookieStore.get("admin_auth");
-  
-  return NextResponse.json({ 
-    authenticated: auth?.value === "true" 
-  });
+  const { isAdmin } = await import("@/lib/admin-auth");
+  const authed = await isAdmin();
+  return Response.json({ authenticated: authed });
 }
 
-// Выход
 export async function DELETE() {
-  const cookieStore = await cookies();
-  cookieStore.delete("admin_auth");
-  
-  return NextResponse.json({ success: true });
+  const { clearAdminCookie } = await import("@/lib/admin-auth");
+  await clearAdminCookie();
+  return Response.json({ ok: true });
 }
