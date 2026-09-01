@@ -258,7 +258,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ================================================ */
-/* ===== МОБИЛЬНАЯ АДАПТАЦИЯ (ДОБАВЛЕНО) ===== */
+/* ===== ГЛОБАЛЬНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
 /* ================================================ */
 
 /* Запрещаем горизонтальный скролл */
@@ -427,5 +427,264 @@ body {
 
   .display {
     font-size: 24px !important;
+  }
+}
+
+/* ================================================ */
+/* ===== ФИЛЬТРЫ И СОРТИРОВКА НА МОБИЛКАХ ===== */
+/* ================================================ */
+
+@media (max-width: 768px) {
+  /* Контейнер фильтров */
+  .filter-container,
+  .filters-wrapper {
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 8px 0 !important;
+  }
+
+  /* Кнопки фильтров и сортировки */
+  .filter-btn,
+  .sort-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 10px 16px !important;
+    font-size: 13px !important;
+  }
+
+  /* Блок фильтров (выпадающий) */
+  .filters-panel {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-height: 70vh !important;
+    background: white !important;
+    border-radius: 16px 16px 0 0 !important;
+    padding: 20px 16px !important;
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.15) !important;
+    z-index: 999 !important;
+    overflow-y: auto !important;
+  }
+
+  /* Затемнение при открытых фильтрах */
+  .filters-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    z-index: 998 !important;
+  }
+
+  /* Группы фильтров */
+  .filter-group {
+    padding: 8px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+  }
+
+  .filter-group:last-child {
+    border-bottom: none !important;
+  }
+
+  /* Кнопка "Применить фильтры" */
+  .filter-apply-btn {
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    margin-top: 12px !important;
+  }
+
+  /* Сортировка в выпадающем меню */
+  .sort-options {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .sort-options button {
+    flex: 1 !important;
+    min-width: 80px !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+
+  /* Кнопка "Сбросить" */
+  .filter-reset-btn {
+    font-size: 12px !important;
+    padding: 8px 0 !important;
+  }
+
+  /* Строка с количеством товаров */
+  .product-count {
+    font-size: 12px !important;
+    text-align: center !important;
+    padding: 4px 0 !important;
+  }
+
+  /* ===== СПЕЦИАЛЬНО ДЛЯ ТВОЕГО КОМПОНЕНТА ===== */
+  
+  /* Затемнение */
+  .fixed.inset-0.z-\[100\] .absolute.inset-0.bg-black\/45 {
+    z-index: 999 !important;
+  }
+
+  /* Панель фильтров (bottom sheet) */
+  .animate-sheet {
+    max-height: 85vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+
+  /* Заголовок фильтров — фиксированный */
+  .animate-sheet .sticky.top-0 {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background: white !important;
+    padding: 16px 20px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  }
+
+  /* Контент фильтров — скроллится */
+  .animate-sheet > div:last-child {
+    overflow-y: auto !important;
+    max-height: calc(85vh - 60px) !important;
+    padding: 16px 20px !important;
+  }
+
+  /* Группы фильтров компактнее */
+  .animate-sheet .border-b {
+    padding-bottom: 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .animate-sheet .border-b:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Кнопки размеров — в 3 колонки */
+  .animate-sheet .flex-wrap.gap-2 {
+    gap: 6px !important;
+  }
+
+  .animate-sheet .flex-wrap.gap-2 > button {
+    min-width: 56px !important;
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* Цвета — в 4 колонки */
+  .animate-sheet .flex-wrap.gap-2\.5 {
+    gap: 8px !important;
+  }
+
+  .animate-sheet .flex-wrap.gap-2\.5 > button {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  /* Бренды — список компактнее */
+  .animate-sheet .max-h-\[190px\] {
+    max-height: 120px !important;
+  }
+
+  .animate-sheet .space-y-2\.5 {
+    gap: 4px !important;
+  }
+
+  .animate-sheet .space-y-2\.5 > li > button {
+    font-size: 13px !important;
+    padding: 4px 0 !important;
+  }
+
+  /* Кнопки внизу — фиксированные */
+  .animate-sheet .sticky.bottom-0 {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 10 !important;
+    background: white !important;
+    padding: 12px 16px !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+    gap: 10px !important;
+  }
+
+  .animate-sheet .sticky.bottom-0 button {
+    padding: 14px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+
+  /* Сортировка на мобилках */
+  select {
+    max-width: 160px !important;
+    font-size: 12px !important;
+    padding: 10px 12px !important;
+  }
+
+  /* Хлебные крошки на мобилках */
+  .flex-wrap.items-center.gap-2 {
+    gap: 4px !important;
+    font-size: 10px !important;
+  }
+
+  /* Строка с "Найдено товаров" */
+  .mt-2.text-\[13px\] {
+    font-size: 12px !important;
+  }
+
+  /* Отступы для каталога */
+  .mx-auto.max-w-\[1440px\] {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Кнопка "Показать ещё" */
+  .mt-14.flex.flex-col.items-center.gap-4 button {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-panel {
+    padding: 16px 12px !important;
+    max-height: 80vh !important;
+  }
+
+  .filter-group label {
+    font-size: 13px !important;
+  }
+
+  .filter-group select,
+  .filter-group input {
+    font-size: 14px !important;
+  }
+
+  .animate-sheet {
+    max-height: 90vh !important;
+  }
+
+  .animate-sheet > div:last-child {
+    max-height: calc(90vh - 60px) !important;
+    padding: 12px 14px !important;
+  }
+
+  .animate-sheet .flex-wrap.gap-2 > button {
+    min-width: 48px !important;
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .animate-sheet .flex-wrap.gap-2\.5 > button {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .animate-sheet .sticky.bottom-0 button {
+    padding: 12px !important;
+    font-size: 12px !important;
   }
 }
