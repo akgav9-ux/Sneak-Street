@@ -125,68 +125,98 @@ export function CheckoutClient() {
     !errors.address &&
     !errors.city &&
     !errors.postalCode;
-  const isValid = shippingValid && !errors.card && cart.length > 0;
+ const isValid = shippingValid && (payment === "cash" || !errors.card) && cart.length > 0;
 
-  const placeOrder = async () => {
-    setTouched(true);
-    if (!isValid) {
+ const placeOrder = async () => {
+  setTouched(true);
+  
+  // Проверяем, что все поля заполнены
+  if (!shippingValid) {
+    pushToast({
+      title: "Проверьте данные",
+      description: "Некоторые обязательные поля не заполнены.",
+      tone: "error",
+    });
+    setStep(1);
+    return;
+  }
+
+  // ✅ Если оплата при получении — не проверяем карту!
+  if (payment !== "cash") {
+    // Проверяем карту ТОЛЬКО если НЕ cash
+    if (errors.card) {
       pushToast({
-        title: "Проверьте данные",
-        description: "Некоторые обязательные поля не заполнены.",
+        title: "Проверьте данные карты",
+        description: errors.card,
         tone: "error",
       });
-      if (!shippingValid) setStep(1);
       return;
     }
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: form.fullName,
-          email: form.email,
-          phone: form.phone,
-          address: form.address,
-          city: form.city,
-          postalCode: form.postalCode,
-          country: form.country,
-          shippingMethod,
-          paymentMethod: payment,
-          items: cart.map((c) => ({
-            slug: c.slug,
-            name: c.name,
-            brand: c.brand,
-            image: c.image,
-            size: c.size,
-            color: c.color,
-            price: c.price,
-            quantity: c.quantity,
-          })),
-          subtotal: totals.subtotal,
-          shipping: totals.shipping,
-          tax: totals.tax,
-          discount: totals.discount,
-          total: totals.total,
-        }),
-      });
-      const data = (await res.json()) as {
-        ok: boolean;
-        order?: { orderNumber: string };
-      };
-      if (!data.ok || !data.order) throw new Error("failed");
-      clearCart();
-      window.localStorage.removeItem(COUPON_KEY);
-      router.push(`/checkout/success?order=${data.order.orderNumber}`);
-    } catch {
-      setSubmitting(false);
-      pushToast({
-        title: "Не удалось провести оплату",
-        description: "Попробуйте ещё раз через минуту.",
-        tone: "error",
-      });
+  }
+
+  // ✅ Если оплата при получении — пропускаем проверку карты
+  if (cart.length === 0) {
+    pushToast({
+      title: "Корзина пуста",
+      description: "Добавьте товары перед оформлением.",
+      tone: "error",
+    });
+    return;
+  }
+
+  setSubmitting(true);
+  try {
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fullName: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+        city: form.city,
+        postalCode: form.postalCode,
+        country: form.country,
+        shippingMethod,
+        paymentMethod: payment,
+        items: cart.map((c) => ({
+          slug: c.slug,
+          name: c.name,
+          brand: c.brand,
+          image: c.image,
+          size: c.size,
+          color: c.color,
+          price: c.price,
+          quantity: c.quantity,
+        })),
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        discount: totals.discount,
+        total: totals.total,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.order) {
+      console.error("Order error:", data);
+      throw new Error(data.error || "Ошибка оформления заказа");
     }
-  };
+
+    clearCart();
+    window.localStorage.removeItem(COUPON_KEY);
+    router.push(`/checkout/success?order=${data.order.orderNumber}`);
+  } catch (error) {
+    console.error("Checkout error:", error);
+    setSubmitting(false);
+    pushToast({
+      title: "Ошибка оформления заказа",
+      description: error instanceof Error ? error.message : "Попробуйте ещё раз через минуту.",
+      tone: "error",
+    });
+  }
+};
 
   if (ready && cart.length === 0) {
     return (
