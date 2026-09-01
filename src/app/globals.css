@@ -688,3 +688,58 @@ body {
     font-size: 12px !important;
   }
 }
+
+/* ================================================ */
+/* ===== ФИКС БУРГЕР-МЕНЮ (ЯРКИЙ И ЧИТАЕМЫЙ) ===== */
+/* ================================================ */
+
+@media (max-width: 768px) {
+  /* Оверлей — светлее */
+  .fixed.inset-0.z-\[100\] .absolute.inset-0 {
+    background: rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+  }
+
+  /* Само меню — белый фон и чёткий текст */
+  .fixed.inset-0.z-\[100\] .bg-white,
+  .fixed.inset-0.z-\[100\] .animate-drawer {
+    background: #ffffff !important;
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  /* Все ссылки в меню — чёрные и яркие */
+  .fixed.inset-0.z-\[100\] a,
+  .fixed.inset-0.z-\[100\] span,
+  .fixed.inset-0.z-\[100\] p,
+  .fixed.inset-0.z-\[100\] button {
+    color: #111111 !important;
+    opacity: 1 !important;
+  }
+
+  /* Ховер для ссылок */
+  .fixed.inset-0.z-\[100\] a:hover {
+    color: #e50000 !important;
+  }
+
+  /* Заголовок и кнопка закрытия */
+  .fixed.inset-0.z-\[100\] .text-\[15px\] {
+    color: #111111 !important;
+  }
+
+  .fixed.inset-0.z-\[100\] button {
+    color: #111111 !important;
+    opacity: 1 !important;
+  }
+
+  /* Категории */
+  .fixed.inset-0.z-\[100\] .border-black\/10 {
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    color: #111111 !important;
+  }
+
+  .fixed.inset-0.z-\[100\] .border-black\/10:hover {
+    border-color: #e50000 !important;
+    color: #e50000 !important;
+  }
+}

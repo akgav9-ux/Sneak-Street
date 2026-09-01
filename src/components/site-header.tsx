@@ -355,64 +355,66 @@ export function SiteHeader() {
         ) : null}
       </header>
 
-      {/* мобильное меню */}
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-[100] lg:hidden">
-          <button
-            aria-label="Закрыть меню"
-            className="absolute inset-0 bg-black/45 backdrop-blur-[2px]"
-            onClick={() => setMobileOpen(false)}
-          />
-          <div className="animate-drawer absolute inset-y-0 left-0 flex w-[86%] max-w-[340px] flex-col bg-white">
-            <div className="flex h-16 items-center justify-between border-b border-black/[0.06] px-5">
-              <span className="text-[15px] font-extrabold tracking-[-0.03em]">
-                SNEAK<span className="text-[#e50000]">&</span>STREET
-              </span>
-              <button onClick={() => setMobileOpen(false)} aria-label="Закрыть">
-                <CloseIcon />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto px-5 py-6">
-              <ul className="space-y-1">
-                {NAV.map((n) => (
-                  <li key={n.label}>
-                    <Link
-                      href={n.href}
-                      className={cx(
-                        "block py-3 text-[18px] font-bold tracking-tight",
-                        n.label === "Распродажа" && "text-[#e50000]",
-                      )}
-                    >
-                      {n.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <p className="eyebrow mt-8 text-[#8a8a8a]">Категории</p>
-              <ul className="mt-3 grid grid-cols-2 gap-2">
-                {CATEGORIES.map((c) => (
-                  <li key={c.slug}>
-                    <Link
-                      href={`/catalog?category=${c.slug}`}
-                      className="block border border-black/10 px-3 py-2.5 text-[12px] font-semibold"
-                    >
-                      {c.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8 space-y-2 border-t border-black/[0.06] pt-6">
-                <Link href="/account" className="block py-2 text-[13px] font-semibold">
-                  Личный кабинет
-                </Link>
-                <Link href="/cart" className="block py-2 text-[13px] font-semibold">
-                  Корзина ({cartCount})
-                </Link>
-              </div>
-            </div>
-          </div>
+     {/* мобильное меню */}
+{mobileOpen ? (
+  <div className="fixed inset-0 z-[100] lg:hidden">
+    <button
+      aria-label="Закрыть меню"
+      className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+      onClick={() => setMobileOpen(false)}
+    />
+    <div className="animate-drawer absolute inset-y-0 left-0 flex w-[86%] max-w-[340px] flex-col bg-white shadow-2xl">
+      <div className="flex h-16 items-center justify-between border-b border-black/[0.06] px-5">
+        <span className="text-[15px] font-extrabold tracking-[-0.03em] text-[#111111]">
+          SNEAK<span className="text-[#e50000]">&</span>STREET
+        </span>
+        <button onClick={() => setMobileOpen(false)} aria-label="Закрыть" className="text-[#111111]">
+          <CloseIcon />
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto px-5 py-6 bg-white">
+        <ul className="space-y-1">
+          {NAV.map((n) => (
+            <li key={n.label}>
+              <Link
+                href={n.href}
+                className={cx(
+                  "block py-3 text-[18px] font-bold tracking-tight text-[#111111]",
+                  n.label === "Распродажа" && "text-[#e50000]",
+                )}
+                onClick={() => setMobileOpen(false)}
+              >
+                {n.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="eyebrow mt-8 text-[#8a8a8a]">Категории</p>
+        <ul className="mt-3 grid grid-cols-2 gap-2">
+          {CATEGORIES.map((c) => (
+            <li key={c.slug}>
+              <Link
+                href={`/catalog?category=${c.slug}`}
+                className="block border border-black/10 px-3 py-2.5 text-[12px] font-semibold text-[#111111] hover:border-[#e50000] hover:text-[#e50000]"
+                onClick={() => setMobileOpen(false)}
+              >
+                {c.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-8 space-y-2 border-t border-black/[0.06] pt-6">
+          <Link href="/account" className="block py-2 text-[13px] font-semibold text-[#111111] hover:text-[#e50000]" onClick={() => setMobileOpen(false)}>
+            Личный кабинет
+          </Link>
+          <Link href="/cart" className="block py-2 text-[13px] font-semibold text-[#111111] hover:text-[#e50000]" onClick={() => setMobileOpen(false)}>
+            Корзина ({cartCount})
+          </Link>
         </div>
-      ) : null}
+      </div>
+    </div>
+  </div>
+) : null}
 
       {/* корзина-шторка */}
       {cartOpen ? (
