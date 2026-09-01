@@ -1,15 +1,13 @@
 // src/app/api/health/route.ts
-import { db } from "@/db";
-import { sql } from "drizzle-orm";
+import { pool } from "@/db";
 
 export async function GET() {
   try {
-    // Правильный способ для Drizzle + SQLite
-    const result = await db.run(sql`select 1`);
+    const result = await pool.query("SELECT 1 as connected");
     return Response.json({ 
       ok: true, 
       message: "✅ База данных подключена",
-      result: result 
+      result: result.rows 
     });
   } catch (error) {
     console.error("❌ Health check failed:", error);
